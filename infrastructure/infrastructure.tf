@@ -6,6 +6,9 @@ variable "region" {}
 variable "shared_credentials_file" {}
 variable "profile" {}
 variable "vpc_cidr_block" {}
+variable "subnet_cidr_block" {}
+
+data "aws_availability_zones" "subnet_azs" {}
 
 #############################################################
 # Defining the provider
@@ -24,6 +27,19 @@ provider "aws" {
 resource "aws_vpc" "ecs_vpc" {
   cidr_block              = "${var.vpc_cidr_block}"
   tags {
-    Name                  = "ecs_vpc"
+    Name                  = "ecs_airflow_vpc"
+  }
+}
+
+##############################################################
+# Defining a subnet for ECS cluster
+##############################################################
+
+resource "aws_subnet" "ecs_subnet" {
+  vpc_id                  = "${aws_vpc.ecs_vpc.id}"
+  cidr_block              = "${var.subnet_cidr_block}"
+  availability_zone       = "${data.aws_availability_zones.subnet_azs.names[0]}"
+  tags {
+    Name                  = "ecs_airflow_subnet"
   }
 }
