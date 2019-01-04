@@ -43,3 +43,29 @@ resource "aws_subnet" "ecs_subnet" {
     Name                  = "ecs_airflow_subnet"
   }
 }
+
+##############################################################
+# Defining an internet gateway
+##############################################################
+
+resource "aws_internet_gateway" "ecs_ig" {
+  vpc_id = "${aws_vpc.ecs_vpc.id}"
+  tags {
+    Name = "ecs_airflow_ig"
+  }
+}
+
+##############################################################
+# Defining a public route table
+##############################################################
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = "${aws_vpc.ecs_vpc.id}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.ecs_ig.id}"
+  }
+  tags {
+    Name = "ecs_airflow_rt"
+  }
+}
