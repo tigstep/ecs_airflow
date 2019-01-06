@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+/infrastructure_as_code/variables.tfvars
+/infrastructure_as_code/outputs.json
+/infrastructure_as_code/terraform.tfstate
+/ecs_airflow.iml
+/infrastructure_as_code/.terraform/
+/.idea/
+/infrastructure_as_code/terraform.tfstate.backup
