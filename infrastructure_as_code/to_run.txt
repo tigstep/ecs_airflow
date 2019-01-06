@@ -1,0 +1,7 @@
+# To create the AWS resources in terraform scripts, using variables.tfvars and writing the outputs to output.json
+
+terraform apply -var-file=variables.tfvars && terraform output -json > outputs.json
+
+# To destroy the AWS resources in terraform scripts, using variables.tfvars
+
+terraform destroy -var-file=variables.tfvars

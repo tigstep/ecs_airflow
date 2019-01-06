@@ -1,0 +1,8 @@
+region = "us-west-1"
+shared_credentials_file = "C:\\Users\\Tigran\\.aws\\credentials"
+profile = "terraform_user"
+vpc_cidr_block = "10.0.0.0/16"
+subnet_cidr_block_1 = "10.0.1.0/24"
+subnet_cidr_block_2 = "10.0.2.0/24"
+ecs_cluster = "ecs_airflow_cluster"
+ecs_key_pair_name = "ecs_airflow_key_pair"
