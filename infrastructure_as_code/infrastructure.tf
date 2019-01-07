@@ -81,6 +81,20 @@ resource "aws_route_table" "public_route_table" {
 }
 
 ##############################################################
+# Associate Subnets with the Route Table
+##############################################################
+
+resource "aws_route_table_association" "subnet_route_association_1" {
+  subnet_id      = "${aws_subnet.ecs_subnet_1.id}"
+  route_table_id = "${aws_route_table.public_route_table.id}"
+}
+
+resource "aws_route_table_association" "subnet_route_association_2" {
+  subnet_id      = "${aws_subnet.ecs_subnet_2.id}"
+  route_table_id = "${aws_route_table.public_route_table.id}"
+}
+
+##############################################################
 # Defining a Security Group
 ##############################################################
 
