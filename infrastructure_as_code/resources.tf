@@ -149,8 +149,8 @@ resource "aws_ecs_task_definition" "wordpress" {
 "hostPort": 80
 }
 ],
-"memory": 500,
-"cpu": 10
+"memory": 250,
+"cpu": 5
 },
 {
 "environment": [
@@ -161,8 +161,8 @@ resource "aws_ecs_task_definition" "wordpress" {
 ],
 "name": "mysql",
 "image": "mysql",
-"cpu": 10,
-"memory": 500,
+"cpu": 5,
+"memory": 250,
 "essential": true
 }
 ]
