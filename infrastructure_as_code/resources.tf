@@ -143,26 +143,52 @@ resource "aws_ecs_task_definition" "wordpress" {
 ],
 "image": "wordpress",
 "essential": true,
+"environment": [
+{
+"name": "WORDPRESS_DB_HOST",
+"value": "mysql:3306"
+},
+{
+"name": "WORDPRESS_DB_USER",
+"value": "wordpress"
+},
+{
+"name": "WORDPRESS_DB_PASSWORD",
+"value": "wordpress"
+}
+],
 "portMappings": [
 {
 "containerPort": 80,
 "hostPort": 80
 }
 ],
-"memory": 250,
-"cpu": 5
+"memory": 400,
+"cpu": 7
 },
 {
 "environment": [
 {
 "name": "MYSQL_ROOT_PASSWORD",
-"value": "password"
+"value": "somewordpress"
+},
+{
+"name": "MYSQL_DATABASE",
+"value": "wordpress"
+},
+{
+"name": "MYSQL_USER",
+"value": "wordpress"
+},
+{
+"name": "MYSQL_PASSWORD",
+"value": "wordpress"
 }
 ],
 "name": "mysql",
-"image": "mysql",
-"cpu": 5,
-"memory": 250,
+"image": "mysql:5.7",
+"cpu": 7,
+"memory": 400,
 "essential": true
 }
 ]
