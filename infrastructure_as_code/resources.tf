@@ -134,65 +134,7 @@ data "aws_ecs_task_definition" "wordpress" {
 
 resource "aws_ecs_task_definition" "wordpress" {
   family                = "hello_world"
-  container_definitions = <<DEFINITION
-[
-{
-"name": "wordpress",
-"links": [
-"mysql"
-],
-"image": "wordpress",
-"essential": true,
-"environment": [
-{
-"name": "WORDPRESS_DB_HOST",
-"value": "mysql:3306"
-},
-{
-"name": "WORDPRESS_DB_USER",
-"value": "wordpress"
-},
-{
-"name": "WORDPRESS_DB_PASSWORD",
-"value": "wordpress"
-}
-],
-"portMappings": [
-{
-"containerPort": 80,
-"hostPort": 80
-}
-],
-"memory": 400,
-"cpu": 7
-},
-{
-"environment": [
-{
-"name": "MYSQL_ROOT_PASSWORD",
-"value": "somewordpress"
-},
-{
-"name": "MYSQL_DATABASE",
-"value": "wordpress"
-},
-{
-"name": "MYSQL_USER",
-"value": "wordpress"
-},
-{
-"name": "MYSQL_PASSWORD",
-"value": "wordpress"
-}
-],
-"name": "mysql",
-"image": "mysql:5.7",
-"cpu": 7,
-"memory": 400,
-"essential": true
-}
-]
-DEFINITION
+  container_definitions = "${file("task_definitions/wordpress.json")}"
 }
 
 #############################################################
