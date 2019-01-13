@@ -1,0 +1,48 @@
+[
+  {
+    "name": "webserver",
+    "links": [
+      "postgress"
+    ],
+    "image": "puckel/docker-airflow:1.10.1",
+    "essential": true,
+    "environment": [
+      {
+        "name": "LOAD_EX",
+        "value": "n"
+      },
+      {
+        "name": "EXECUTOR",
+        "value": "Local"
+      }
+    ],
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "memory": 400,
+    "cpu": 7
+  },
+  {
+    "name": "postgress",
+    "image": "postgress:9.6",
+    "environment": [
+      {
+        "name": "POSTGRES_USER",
+        "value": "airflow"
+      },
+      {
+        "name": "POSTGRES_PASSWORD",
+        "value": "airflow"
+      },
+      {
+        "name": "POSTGRES_DB",
+        "value": "airflow"
+      }
+    ],
+    "memory": 400,
+    "cpu": 7
+  }
+]
