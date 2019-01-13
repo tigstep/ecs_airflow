@@ -2,18 +2,14 @@
   {
     "name": "webserver",
     "links": [
-      "postgress"
+      "postgres"
     ],
-    "image": "puckel/docker-airflow:1.10.1",
+    "image": "puckel/docker-airflow",
     "essential": true,
     "environment": [
       {
         "name": "LOAD_EX",
         "value": "n"
-      },
-      {
-        "name": "EXECUTOR",
-        "value": "Local"
       }
     ],
     "portMappings": [
@@ -26,8 +22,8 @@
     "cpu": 7
   },
   {
-    "name": "postgress",
-    "image": "postgress:9.6",
+    "name": "postgres",
+    "image": "postgres",
     "environment": [
       {
         "name": "POSTGRES_USER",

@@ -29,7 +29,7 @@ resource "aws_alb" "ecs_load_balancer" {
 
 resource "aws_alb_target_group" "ecs_target_group" {
   name                = "ecs-target-group"
-  port                = "80"
+  port                = "8080"
   protocol            = "HTTP"
   vpc_id              = "${aws_vpc.ecs_vpc.id}"
 
@@ -37,9 +37,9 @@ resource "aws_alb_target_group" "ecs_target_group" {
     healthy_threshold   = "5"
     unhealthy_threshold = "2"
     interval            = "30"
-    matcher             = "200"
+    matcher             = "200,302"
     path                = "/"
-    port                = "traffic-port"
+    port                = "8080"
     protocol            = "HTTP"
     timeout             = "5"
   }
@@ -128,13 +128,14 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 # Defining the ECS Task
 #############################################################
 
-data "aws_ecs_task_definition" "wordpress" {
-  task_definition = "${aws_ecs_task_definition.wordpress.family}"
+data "aws_ecs_task_definition" "webserver" {
+  depends_on = [ "aws_ecs_task_definition.webserver" ]
+  task_definition = "${aws_ecs_task_definition.webserver.family}"
 }
 
-resource "aws_ecs_task_definition" "wordpress" {
-  family                = "hello_world"
-  container_definitions = "${file("task_definitions/wordpress.json")}"
+resource "aws_ecs_task_definition" "webserver" {
+  family                = "ecs_airflow"
+  container_definitions = "${file("task_definitions/airflow_sequential.json")}"
 }
 
 #############################################################
@@ -145,12 +146,12 @@ resource "aws_ecs_service" "ecs_airflow_service" {
 name            = "ecs-airflow-service"
 iam_role        = "${aws_iam_role.ecs_service_role.name}"
 cluster         = "${aws_ecs_cluster.ecs_cluster.id}"
-task_definition = "${aws_ecs_task_definition.wordpress.family}:${max("${aws_ecs_task_definition.wordpress.revision}", "${data.aws_ecs_task_definition.wordpress.revision}")}"
+task_definition = "${aws_ecs_task_definition.webserver.family}:${max("${aws_ecs_task_definition.webserver.revision}", "${data.aws_ecs_task_definition.webserver.revision}")}"
 desired_count   = 2
 
 load_balancer {
 target_group_arn  = "${aws_alb_target_group.ecs_target_group.arn}"
-container_port    = 80
-container_name    = "wordpress"
+container_port    = 8080
+container_name    = "webserver"
 }
 }
