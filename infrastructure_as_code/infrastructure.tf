@@ -27,6 +27,8 @@ provider "aws" {
 
 resource "aws_vpc" "ecs_vpc" {
   cidr_block              = "${var.vpc_cidr_block}"
+  enable_dns_support      = true
+  enable_dns_hostnames    = true
   tags {
     Name                  = "ecs_airflow_vpc"
   }
@@ -129,7 +131,14 @@ resource "aws_security_group" "ecs_security_group" {
     to_port = 0
     protocol = "tcp"
     cidr_blocks = ["${var.subnet_cidr_block_1}", "${var.subnet_cidr_block_2}"]
-}
+  }
+
+  ingress {
+    from_port = 2049
+    to_port = 2049
+    protocol = "tcp"
+    cidr_blocks = ["${var.subnet_cidr_block_1}", "${var.subnet_cidr_block_2}"]
+  }
 
   egress {
     from_port = "0"

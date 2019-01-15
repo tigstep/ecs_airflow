@@ -43,7 +43,7 @@ resource "aws_alb_target_group" "ecs_target_group" {
     protocol            = "HTTP"
     timeout             = "5"
   }
-
+  depends_on            = ["aws_alb.ecs_load_balancer"]
   tags {
     Name = "ecs_airflow_target_group"
   }
@@ -88,6 +88,10 @@ resource "aws_launch_configuration" "ecs_launch_configuration" {
     volume_size = 8
     delete_on_termination = true
   }
+  depends_on    = [
+    "aws_efs_mount_target.ecs_airflow_mt_1"
+    , "aws_efs_mount_target.ecs_airflow_mt_2"
+]
 
   lifecycle {
     create_before_destroy = true
@@ -99,6 +103,10 @@ resource "aws_launch_configuration" "ecs_launch_configuration" {
   user_data                   = <<EOF
 #!/bin/bash
 echo ECS_CLUSTER=${var.ecs_cluster} >> /etc/ecs/ecs.config
+sudo mkdir efs
+sudo yum install -y amazon-efs-utils
+echo ${aws_efs_file_system.ecs_airflow_efs.id} >> /efs_id.txt
+sudo mount -t efs ${aws_efs_file_system.ecs_airflow_efs.id}:/ efs
 EOF
 }
 
@@ -154,4 +162,38 @@ target_group_arn  = "${aws_alb_target_group.ecs_target_group.arn}"
 container_port    = 8080
 container_name    = "webserver"
 }
+}
+
+#############################################################
+# Defining EFS volume
+#############################################################
+
+resource "aws_efs_file_system" "ecs_airflow_efs" {
+  tags = {
+    Name = "ecs_airflow_efs"
+  }
+}
+
+#############################################################
+# Defining EFS mount targets
+#############################################################
+
+resource "aws_efs_mount_target" "ecs_airflow_mt_1" {
+  file_system_id  = "${aws_efs_file_system.ecs_airflow_efs.id}"
+  subnet_id       = "${aws_subnet.ecs_subnet_1.id}"
+  security_groups = ["${aws_security_group.ecs_security_group.id}"]
+}
+
+resource "aws_efs_mount_target" "ecs_airflow_mt_2" {
+  file_system_id  = "${aws_efs_file_system.ecs_airflow_efs.id}"
+  subnet_id       = "${aws_subnet.ecs_subnet_2.id}"
+  security_groups = ["${aws_security_group.ecs_security_group.id}"]
+}
+
+#############################################################
+# Defining ourputs
+#############################################################
+
+output "ecs_airflow_efs_id" {
+  value = "${aws_efs_file_system.ecs_airflow_efs.id}"
 }
