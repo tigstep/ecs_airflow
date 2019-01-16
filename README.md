@@ -56,6 +56,7 @@ In order to tear down the infrastructure, run <br>
 </h2>
   <ul>
     <li>Add variables.tfvars template to GIT</li>
+    <li>Add a sample dag for testing</li>
     <li>Complete the Diagram for this project</li>
     <li>Add RDS and Redis instances to the Infrastructure</li>
     <li>Make the Airflow Executor Cellary based, using RDS instance and Redis</li>
