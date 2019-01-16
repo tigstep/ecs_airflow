@@ -21,7 +21,7 @@
 <h2>
   Short Description
 </h2>  
-A project that sets up an AWS ECS infrastructure and hosts an Apachi Airflow docker container.
+A project that sets up an AWS ECS infrastructure and hosts an Apachi Airflow running inside a docker container.
 <h2>
   Process Description
 </h2>
