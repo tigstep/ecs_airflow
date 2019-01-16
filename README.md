@@ -57,9 +57,7 @@ In order to tear down the infrastructure, run <br>
   <ul>
     <li>Add variables.tfvars template to GIT</li>
     <li>Complete the Diagram for this project</li>
-    <li>Add EFS tp the infrastructure</li>
-    <li>Mount a Volume for the Airflow DAGS using the above EFS</li>
-    <li>Add RDS and Redis instances to teh Infrastructure</li>
+    <li>Add RDS and Redis instances to the Infrastructure</li>
     <li>Make the Airflow Executor Cellary based, using RDS instance and Redis</li>
     <li>Revisit the key_pair creation process</li>
     <li>Improve Parametrization</li>  
