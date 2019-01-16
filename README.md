@@ -48,7 +48,7 @@ A project that sets up an AWS ECS infrastructure and hosts an Apachi Airflow run
   Execution
 </h2>
 In order to execute, modify the varriable.tfvar file with proper variables and run <br>
-<b>terraform apply -var-file=variables.tfvars && terraform output -json > outputs.json</b>
+<b>terraform apply -var-file=variables.tfvars && terraform output -json > outputs.json</b><br>
 In order to tear down the infrastructure, run <br>
 <b>terraform destroy -var-file=variables.tfvars</b>
 <h2>
