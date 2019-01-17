@@ -21,7 +21,7 @@
 <h2>
   Short Description
 </h2>  
-A project that sets up an AWS ECS infrastructure and hosts an Apachi Airflow docker container.
+A project that sets up an AWS ECS infrastructure and hosts an Apachi Airflow running inside a docker container.
 <h2>
   Process Description
 </h2>
@@ -48,7 +48,7 @@ A project that sets up an AWS ECS infrastructure and hosts an Apachi Airflow doc
   Execution
 </h2>
 In order to execute, modify the varriable.tfvar file with proper variables and run <br>
-<b>terraform apply -var-file=variables.tfvars && terraform output -json > outputs.json</b>
+<b>terraform apply -var-file=variables.tfvars && terraform output -json > outputs.json</b><br>
 In order to tear down the infrastructure, run <br>
 <b>terraform destroy -var-file=variables.tfvars</b>
 <h2>
@@ -56,10 +56,9 @@ In order to tear down the infrastructure, run <br>
 </h2>
   <ul>
     <li>Add variables.tfvars template to GIT</li>
+    <li>Add a sample dag for testing</li>
     <li>Complete the Diagram for this project</li>
-    <li>Add EFS tp the infrastructure</li>
-    <li>Mount a Volume for the Airflow DAGS using the above EFS</li>
-    <li>Add RDS and Redis instances to teh Infrastructure</li>
+    <li>Add RDS and Redis instances to the Infrastructure</li>
     <li>Make the Airflow Executor Cellary based, using RDS instance and Redis</li>
     <li>Revisit the key_pair creation process</li>
     <li>Improve Parametrization</li>  
