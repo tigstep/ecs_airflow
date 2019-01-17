@@ -8,6 +8,9 @@ variable "ecs_key_pair_name" {}
 variable "max_instance_size" {}
 variable "min_instance_size" {}
 variable "desired_capacity" {}
+variable "postgres_name" {}
+variable "postgres_username" {}
+variable "postgres_password" {}
 
 #############################################################
 # Defining Application Load Balancer
@@ -143,6 +146,10 @@ data "aws_ecs_task_definition" "webserver" {
 
 resource "aws_ecs_task_definition" "webserver" {
   family                = "ecs_airflow"
+  volume {
+    name                = "dag_folder"
+    host_path           = "/efs"
+  }
   container_definitions = "${file("task_definitions/airflow_sequential.json")}"
 }
 
@@ -188,6 +195,39 @@ resource "aws_efs_mount_target" "ecs_airflow_mt_2" {
   file_system_id  = "${aws_efs_file_system.ecs_airflow_efs.id}"
   subnet_id       = "${aws_subnet.ecs_subnet_2.id}"
   security_groups = ["${aws_security_group.ecs_security_group.id}"]
+}
+
+################################################################
+# creating subnet_group for rds
+################################################################
+
+resource "aws_db_subnet_group" "rds_subnet_group" {
+  name        = "subnet_group"
+  description = "subnet group for RDS"
+  subnet_ids  = ["${aws_subnet.ecs_subnet_1.id}", "${aws_subnet.ecs_subnet_2.id}"]
+}
+
+################################################################
+# adding a RDS instance                                        #
+################################################################
+
+resource "aws_db_instance" "ecs_airflow_rds" {
+  allocated_storage      = 5
+  identifier             = "ecs-airflow"
+  storage_type           = "gp2"
+  engine                 = "postgres"
+  engine_version         = "9.5.4"
+  instance_class         = "db.t2.micro"
+  name                   = "${var.postgres_name}"
+  username               = "${var.postgres_username}"
+  password               = "${var.postgres_password}"
+  publicly_accessible    = true
+  vpc_security_group_ids = ["${aws_security_group.ecs_security_group.id}"]
+  db_subnet_group_name   = "${aws_db_subnet_group.rds_subnet_group.id}"
+  skip_final_snapshot    = true
+  tags {
+    name = "ecs_airflow"
+  }
 }
 
 #############################################################

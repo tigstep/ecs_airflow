@@ -18,6 +18,12 @@
         "hostPort": 8080
       }
     ],
+    "mountPoints": [
+      {
+        "sourceVolume": "dag_folder",
+        "containerPath": "/usr/local/airflow/dags"
+      }
+    ],
     "memory": 400,
     "cpu": 7
   },
