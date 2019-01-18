@@ -140,6 +140,20 @@ resource "aws_security_group" "ecs_security_group" {
     cidr_blocks = ["${var.subnet_cidr_block_1}", "${var.subnet_cidr_block_2}"]
   }
 
+  ingress {
+    from_port = 6379
+    to_port = 6379
+    protocol = "tcp"
+    cidr_blocks = ["${var.subnet_cidr_block_1}", "${var.subnet_cidr_block_2}"]
+  }
+
+  ingress {
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    cidr_blocks = ["${var.subnet_cidr_block_1}", "${var.subnet_cidr_block_2}"]
+  }
+
   egress {
     from_port = "0"
     to_port = "0"

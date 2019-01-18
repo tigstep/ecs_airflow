@@ -198,7 +198,7 @@ resource "aws_efs_mount_target" "ecs_airflow_mt_2" {
 }
 
 ################################################################
-# creating subnet_group for rds
+# Creating subnet_group for rds
 ################################################################
 
 resource "aws_db_subnet_group" "rds_subnet_group" {
@@ -208,7 +208,7 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 }
 
 ################################################################
-# adding a RDS instance                                        #
+# Adding an RDS instance
 ################################################################
 
 resource "aws_db_instance" "ecs_airflow_rds" {
@@ -228,6 +228,31 @@ resource "aws_db_instance" "ecs_airflow_rds" {
   tags {
     name = "ecs_airflow"
   }
+}
+
+################################################################
+# Creating subnet_group for redis
+################################################################
+
+resource "aws_elasticache_subnet_group" "redis_subnet_group" {
+  name       = "redis-subnet-group"
+  subnet_ids = ["${aws_subnet.ecs_subnet_1.id}", "${aws_subnet.ecs_subnet_2.id}"]
+}
+
+################################################################
+# Adding a Redis Cluster
+################################################################
+
+resource "aws_elasticache_cluster" "ecs_ariflow_redis_cluster" {
+  cluster_id           = "ecs-airflow-redis"
+  engine               = "redis"
+  node_type            = "cache.t2.micro"
+  num_cache_nodes      = 1
+  parameter_group_name = "default.redis5.0"
+  engine_version       = "5.0.0"
+  port                 = 6379
+  subnet_group_name    = "${aws_elasticache_subnet_group.redis_subnet_group.id}"
+  security_group_ids   = ["${aws_security_group.ecs_security_group.id}"]
 }
 
 #############################################################
