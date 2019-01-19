@@ -33,15 +33,15 @@
     "environment": [
       {
         "name": "POSTGRES_USER",
-        "value": "airflow"
+        "value": "${postgres_user}"
       },
       {
         "name": "POSTGRES_PASSWORD",
-        "value": "airflow"
+        "value": "${postgres_password}"
       },
       {
         "name": "POSTGRES_DB",
-        "value": "airflow"
+        "value": "${postgres_db}"
       }
     ],
     "memory": 400,

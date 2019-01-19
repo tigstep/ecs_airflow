@@ -136,6 +136,19 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 }
 
 #############################################################
+# Defining a Template File
+#############################################################
+
+data "template_file" "task_template" {
+  template = "${file("task_definitions/airflow.json.tpl")}"
+  vars {
+    postgres_user = "airflow"
+    postgres_db = "airflow"
+    postgres_password = "airflow"
+  }
+}
+
+#############################################################
 # Defining the ECS Task
 #############################################################
 
@@ -150,7 +163,7 @@ resource "aws_ecs_task_definition" "webserver" {
     name                = "dag_folder"
     host_path           = "/efs"
   }
-  container_definitions = "${file("task_definitions/airflow_sequential.json")}"
+  container_definitions = "${data.template_file.task_template.rendered}"
 }
 
 #############################################################
@@ -158,17 +171,17 @@ resource "aws_ecs_task_definition" "webserver" {
 #############################################################
 
 resource "aws_ecs_service" "ecs_airflow_service" {
-name            = "ecs-airflow-service"
-iam_role        = "${aws_iam_role.ecs_service_role.name}"
-cluster         = "${aws_ecs_cluster.ecs_cluster.id}"
-task_definition = "${aws_ecs_task_definition.webserver.family}:${max("${aws_ecs_task_definition.webserver.revision}", "${data.aws_ecs_task_definition.webserver.revision}")}"
-desired_count   = 2
+  name            = "ecs-airflow-service"
+  iam_role        = "${aws_iam_role.ecs_service_role.name}"
+  cluster         = "${aws_ecs_cluster.ecs_cluster.id}"
+  task_definition = "${aws_ecs_task_definition.webserver.family}:${max("${aws_ecs_task_definition.webserver.revision}", "${data.aws_ecs_task_definition.webserver.revision}")}"
+  desired_count   = 2
 
-load_balancer {
-target_group_arn  = "${aws_alb_target_group.ecs_target_group.arn}"
-container_port    = 8080
-container_name    = "webserver"
-}
+  load_balancer {
+    target_group_arn  = "${aws_alb_target_group.ecs_target_group.arn}"
+    container_port    = 8080
+    container_name    = "webserver"
+  }
 }
 
 #############################################################
