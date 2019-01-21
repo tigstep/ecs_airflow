@@ -83,7 +83,7 @@ resource "aws_alb_listener" "alb_listener" {
 resource "aws_launch_configuration" "ecs_launch_configuration" {
   name                        = "ecs-launch-configuration"
   image_id                    = "ami-0285183bbef6224bd"
-  instance_type               = "t2.micro"
+  instance_type               = "t2.small"
   iam_instance_profile        = "${aws_iam_instance_profile.ecs_instance_profile.id}"
 
   root_block_device {
@@ -140,11 +140,18 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 #############################################################
 
 data "template_file" "task_template" {
-  template = "${file("task_definitions/airflow.json.tpl")}"
+  template = "${file("task_definitions/airflow_celery.json.tpl")}"
+  depends_on = [
+    "aws_elasticache_cluster.ecs_ariflow_redis_cluster"
+    , "aws_db_instance.ecs_airflow_rds"
+  ],
   vars {
-    postgres_user = "airflow"
-    postgres_db = "airflow"
-    postgres_password = "airflow"
+    postgres_user = "${aws_db_instance.ecs_airflow_rds.username}"
+    postgres_db = "${aws_db_instance.ecs_airflow_rds.name}"
+    postgres_password = "${aws_db_instance.ecs_airflow_rds.password}"
+    postgres_host = "${aws_db_instance.ecs_airflow_rds.address}"
+    fernet_key = "46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho="
+    redis_host = "${aws_elasticache_cluster.ecs_ariflow_redis_cluster.cache_nodes.0.address}"
   }
 }
 
@@ -274,4 +281,8 @@ resource "aws_elasticache_cluster" "ecs_ariflow_redis_cluster" {
 
 output "ecs_airflow_efs_id" {
   value = "${aws_efs_file_system.ecs_airflow_efs.id}"
+}
+
+output "ecs_airflow_redis_address" {
+  value = "${aws_elasticache_cluster.ecs_ariflow_redis_cluster.cache_nodes.0.address}"
 }
