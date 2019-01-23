@@ -82,7 +82,7 @@ resource "aws_alb_listener" "alb_listener" {
 
 resource "aws_launch_configuration" "ecs_launch_configuration" {
   name                        = "ecs-launch-configuration"
-  image_id                    = "ami-0285183bbef6224bd"
+  image_id                    = "ami-03a86880c9c6880ac"
   instance_type               = "t2.small"
   iam_instance_profile        = "${aws_iam_instance_profile.ecs_instance_profile.id}"
 

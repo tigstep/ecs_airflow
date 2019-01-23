@@ -1,0 +1,14 @@
+region = {region where the infrastructure will be deployed}
+shared_credentials_file = {location of the .aws/credentials to be used by terraform}
+profile = {terraform user name}
+vpc_cidr_block = {CIDR block for the VPC}
+subnet_cidr_block_1 = {CIDR block for the public subnet_1}
+subnet_cidr_block_2 = {CIDR block for the public subnet_2}
+ecs_cluster = {ecs cluster name}
+ecs_key_pair_name = {premade aws key for ec2}
+max_instance_size = {max number of ecs instances}
+min_instance_size = {min number of ecs instances}
+desired_capacity = {desired number of ecs instances}
+postgres_name = {name of the postgress db to be used by airflow}
+postgres_username = {username of the postgress db to be used by airflow}
+postgres_password = {password of the postgress db to be used by airflow}
