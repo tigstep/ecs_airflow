@@ -55,7 +55,6 @@ In order to tear down the infrastructure, run <br>
   To Do
 </h2>
   <ul>
-    <li>Add variables.tfvars template to GIT</li>
     <li>Complete the Diagram for this project</li>
     <li>Revisit the key_pair creation process</li>
     <li>Improve Parametrization</li>  
