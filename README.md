@@ -3,6 +3,7 @@
 <h2>
   Diagram
 </h2>
+
 ![alt text](https://github.com/tigstep/ecs_airflow/blob/master/diagrams/aws_ecs_diagram.jpg)
 <h2>
   Requirements
