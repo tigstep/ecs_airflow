@@ -166,6 +166,7 @@ data "aws_ecs_task_definition" "webserver" {
 
 resource "aws_ecs_task_definition" "webserver" {
   family                = "ecs_airflow"
+  network_mode          = "host"
   volume {
     name                = "dag_folder"
     host_path           = "/efs"
@@ -182,7 +183,7 @@ resource "aws_ecs_service" "ecs_airflow_service" {
   iam_role        = "${aws_iam_role.ecs_service_role.name}"
   cluster         = "${aws_ecs_cluster.ecs_cluster.id}"
   task_definition = "${aws_ecs_task_definition.webserver.family}:${max("${aws_ecs_task_definition.webserver.revision}", "${data.aws_ecs_task_definition.webserver.revision}")}"
-  desired_count   = 2
+  desired_count   = 1
 
   load_balancer {
     target_group_arn  = "${aws_alb_target_group.ecs_target_group.arn}"
