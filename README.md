@@ -57,7 +57,11 @@ In order to tear down the infrastructure, run <br>
   To Do
 </h2>
   <ul>
-    <li>Complete the Diagram for this project</li>
+    <li>Automatically push the DAG's from S3</li>
     <li>Revisit the key_pair creation process</li>
     <li>Improve Parametrization</li>  
   </ul>
+<h2>
+  Nice To Have
+</h2>
+  Remote s3 logging
