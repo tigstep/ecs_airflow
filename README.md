@@ -64,4 +64,4 @@ In order to tear down the infrastructure, run <br>
 <h2>
   Nice To Have
 </h2>
-  Remote s3 logging
+    <li>Remote s3 logging</li>
