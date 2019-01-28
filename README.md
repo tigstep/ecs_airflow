@@ -59,7 +59,7 @@ In order to tear down the infrastructure, run <br>
   <ul>
     <li>Automatically push the DAG's from S3</li>
     <li>Revisit the key_pair creation process</li>
-    <li>Improve Parametrization</li>  
+    <li>Improve Parametrization and add descriptions to tfvars</li>  
   </ul>
 <h2>
   Nice To Have
@@ -67,3 +67,7 @@ In order to tear down the infrastructure, run <br>
   <ul>
     <li>Remote s3 logging</li>
   </ul>
+<h2>
+  Warnings
+</h2>
+  Current configuration of this project will be using AWS services that are beyond the Free Tier!
